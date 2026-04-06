@@ -817,7 +817,7 @@ function LogScreen({
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
           placeholder="למשל: 2 ביצים, פרוסת לחם, חצי אבוקדו"
-          className="w-full bg-stone-50 rounded-2xl px-4 py-3 outline-none"
+          className="w-full bg-stone-100 text-stone-900 placeholder-stone-400 rounded-2xl px-4 py-3 outline-none"
         />
         <p className="text-xs text-stone-400 mt-2">
           הערכה: {preview.kcal} קק״ל · {preview.protein}ג חלבון. אפשר לדרוס ידנית למטה.
@@ -829,7 +829,7 @@ function LogScreen({
             value={kcalOverride}
             onChange={(e) => setKcalOverride(e.target.value)}
             placeholder="קק״ל ידני"
-            className="w-1/2 bg-stone-50 rounded-2xl px-4 py-3 outline-none text-sm"
+            className="w-1/2 bg-stone-100 text-stone-900 placeholder-stone-400 rounded-2xl px-4 py-3 outline-none text-sm"
           />
           <input
             type="number"
@@ -837,7 +837,7 @@ function LogScreen({
             value={proteinOverride}
             onChange={(e) => setProteinOverride(e.target.value)}
             placeholder="חלבון ג׳"
-            className="w-1/2 bg-stone-50 rounded-2xl px-4 py-3 outline-none text-sm"
+            className="w-1/2 bg-stone-100 text-stone-900 placeholder-stone-400 rounded-2xl px-4 py-3 outline-none text-sm"
           />
         </div>
         <button
@@ -1146,7 +1146,7 @@ function WeightScreen({ weights, setTodayWeight, weeklyAvg }) {
           value={val}
           onChange={(e) => setVal(e.target.value)}
           placeholder="למשל 75.4"
-          className="w-full bg-stone-50 rounded-2xl px-4 py-3 outline-none"
+          className="w-full bg-stone-100 text-stone-900 placeholder-stone-400 rounded-2xl px-4 py-3 outline-none"
         />
         <button
           onClick={() => {
@@ -1180,8 +1180,9 @@ function CodeGate({ onSubmit }) {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
-          placeholder="למשל: dudu-2026"
-          className="w-full bg-stone-50 rounded-2xl px-4 py-3 outline-none mb-3"
+          placeholder="dudu-2026"
+          dir="ltr"
+          className="w-full bg-stone-100 text-stone-900 placeholder-stone-400 rounded-2xl px-4 py-3 outline-none mb-3 text-right"
           autoFocus
         />
         <button

@@ -1,0 +1,11 @@
+{
+  "name": "Med Coach",
+  "short_name": "Med Coach",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafaf9",
+  "theme_color": "#6B8E23",
+  "lang": "he",
+  "dir": "rtl",
+  "icons": []
+}

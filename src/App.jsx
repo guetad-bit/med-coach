@@ -408,13 +408,27 @@ export default function App() {
   const [syncStatus, setSyncStatus] = useState("idle"); // idle|loading|saving|saved|error
   const hydratedRef = useRef(false);
 
+  // Supabase config from build-time env vars
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+  const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const supabaseReady = Boolean(SUPABASE_URL && SUPABASE_KEY);
+  const sbHeaders = {
+    apikey: SUPABASE_KEY || "",
+    Authorization: `Bearer ${SUPABASE_KEY || ""}`,
+    "Content-Type": "application/json",
+  };
+
   // Pull state on first load when userCode is set
   useEffect(() => {
-    if (!userCode) return;
+    if (!userCode || !supabaseReady) { hydratedRef.current = true; return; }
     setSyncStatus("loading");
-    fetch(`/api/state?user=${encodeURIComponent(userCode)}`)
+    fetch(
+      `${SUPABASE_URL}/rest/v1/med_state?user_code=eq.${encodeURIComponent(userCode)}&select=data`,
+      { headers: sbHeaders }
+    )
       .then((r) => r.json())
-      .then(({ data }) => {
+      .then((rows) => {
+        const data = rows && rows[0] && rows[0].data;
         if (data) {
           if (data.meals) setMeals(data.meals);
           if (data.weights) setWeights(data.weights);
@@ -429,23 +443,26 @@ export default function App() {
         setSyncStatus("saved");
       })
       .catch(() => { hydratedRef.current = true; setSyncStatus("error"); });
-  }, [userCode]);
+  }, [userCode, supabaseReady]);
 
   // Debounced push on state change (after hydration)
   useEffect(() => {
-    if (!userCode || !hydratedRef.current) return;
+    if (!userCode || !hydratedRef.current || !supabaseReady) return;
     setSyncStatus("saving");
     const t = setTimeout(() => {
-      fetch(`/api/state?user=${encodeURIComponent(userCode)}`, {
+      fetch(`${SUPABASE_URL}/rest/v1/med_state?on_conflict=user_code`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ meals, weights, planSeed, streak, lastLog, dislikes, swaps, practiceLog }),
+        headers: { ...sbHeaders, Prefer: "resolution=merge-duplicates,return=minimal" },
+        body: JSON.stringify({
+          user_code: userCode,
+          data: { meals, weights, planSeed, streak, lastLog, dislikes, swaps, practiceLog },
+        }),
       })
-        .then((r) => r.ok ? setSyncStatus("saved") : setSyncStatus("error"))
+        .then((r) => (r.ok ? setSyncStatus("saved") : setSyncStatus("error")))
         .catch(() => setSyncStatus("error"));
     }, 800);
     return () => clearTimeout(t);
-  }, [userCode, meals, weights, planSeed, streak, lastLog, dislikes, swaps, practiceLog]);
+  }, [userCode, supabaseReady, meals, weights, planSeed, streak, lastLog, dislikes, swaps, practiceLog]);
 
   const today = todayKey();
   const todayMeals = meals[today] || [];

@@ -1187,7 +1187,7 @@ function CodeGate({ onSubmit }) {
     if (c.length >= 3) onSubmit(c);
   };
   return (
-    <div dir="rtl" className="min-h-screen bg-stone-50 flex items-center justify-center p-6">
+    <div dir="rtl" className="min-h-screen bg-stone-50 flex items-start justify-center p-6 pt-16">
       <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-sm">
         <h1 className="text-2xl font-semibold mb-2" style={{ color: "#556B2F" }}>Med Coach</h1>
         <p className="text-sm text-stone-500 mb-5">
@@ -1200,7 +1200,8 @@ function CodeGate({ onSubmit }) {
           placeholder="dudu-2026"
           dir="ltr"
           className="w-full bg-stone-100 text-stone-900 placeholder-stone-400 rounded-2xl px-4 py-3 outline-none mb-3 text-right"
-          autoFocus
+          autoComplete="off"
+          autoCapitalize="none"
         />
         <button
           onClick={submit}

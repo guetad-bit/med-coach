@@ -1181,7 +1181,7 @@ function WeightScreen({ weights, setTodayWeight, weeklyAvg }) {
 }
 
 function CodeGate({ onSubmit }) {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState("dudu-2026");
   const submit = () => {
     const c = code.trim().toLowerCase();
     if (c.length >= 3) onSubmit(c);
